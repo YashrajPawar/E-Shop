@@ -1,0 +1,20 @@
+{
+  "name": "eshop",
+  "version": "1.0.0",
+  "description": "In this project, we will be developing from scratch REST API endpoints of various functionalities required for the web app upGrad Eshop. The application will interact with and store the data in the MongoDB database. Also, the project is implemented using Express.js and Node.js.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "Yashraj Pawar",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.3"
+  }
+}
