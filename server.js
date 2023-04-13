@@ -13,6 +13,8 @@ mongoose.connect(dbConfig.url).then(function () {
 
 require('./routes/auth.route')(app);
 require('./routes/address.route')(app);
+require('./routes/product.route')(app);
+
 
 app.listen(8080, () => {
     console.log('Server Running on Port 8080');
