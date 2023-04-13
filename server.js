@@ -11,7 +11,8 @@ mongoose.connect(dbConfig.url).then(function () {
     console.log(err)
 })
 
-require('./routes/auth.route')(app)
+require('./routes/auth.route')(app);
+require('./routes/address.route')(app);
 
 app.listen(8080, () => {
     console.log('Server Running on Port 8080');
