@@ -2,6 +2,12 @@ const Product = require('../models/product.model');
 const constants = require('../utils/constants');
 const User = require('../models/user.model');
 
+
+
+/**
+ * 
+ * API to create a product 
+ */
 async function createProduct(req, res) {
 
 
@@ -26,10 +32,13 @@ async function createProduct(req, res) {
 
     try {
 
+
+        //check for which user logged in
         const loggedUser = await User.findOne({
             email: req.email
         })
 
+        //if user is not an ADMIN then he cannot excess endpoint
         if (loggedUser.role != constants.userType.admin) {
 
             return res.status(401).send({
@@ -53,8 +62,16 @@ async function createProduct(req, res) {
 
 
 
-
+/**
+ * 
+ * API to get list of products
+ */
 async function getProduct(req, res) {
+
+    /**
+     * check for category,directions,name,sortby fields if not given then select default fields
+     * by given values
+     */
     const category = req.query.category || "";
     const direction = req.query.direction || "DESC";
     const name = req.query.name || "";
@@ -78,6 +95,11 @@ async function getProduct(req, res) {
 
 }
 
+
+/**
+ * 
+ *API end points to get products by Id
+ */
 async function getProductById(req, res) {
 
     try {
@@ -104,6 +126,10 @@ async function getProductById(req, res) {
     }
 }
 
+/**
+ *
+ * API endpoints to update product by details
+ */
 async function updateProductDetails(req, res) {
 
     const accessToken = req.headers['x-access-token'];
@@ -121,6 +147,7 @@ async function updateProductDetails(req, res) {
             email: req.email
         })
 
+        // check if logged user is ADMIN or not 
         if (loggedUser.role != constants.userType.admin) {
 
             return res.status(401).send({
@@ -140,6 +167,9 @@ async function updateProductDetails(req, res) {
             })
         }
 
+        /**
+         * required details an admin can update
+         */
         product.name = req.body.name != undefined ? req.body.name : product.name;
         product.availableItems = req.body.availableItems != undefined ? req.body.availableItems : product.availableItems;
         product.price = req.body.price != undefined ? req.body.price : product.price;
@@ -162,6 +192,11 @@ async function updateProductDetails(req, res) {
     }
 }
 
+
+/**
+ * 
+ * API end point to delete an product 
+ */
 async function deleteProduct(req, res) {
 
     const accessToken = req.headers['x-access-token'];
@@ -199,9 +234,8 @@ async function deleteProduct(req, res) {
             })
         }
 
-        console.log('comming home');
         const deleteProduct = await Product.findOneAndRemove({
-            productId: req.params.id 
+            productId: req.params.id
         });
         return res.status(200).send(deleteProduct);
 

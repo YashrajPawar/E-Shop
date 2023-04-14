@@ -3,6 +3,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 const secretConfig = require('../config/auth.config')
 
+
+/**
+ * 
+ * Signup API endpoint
+ */
 async function signup(req, res) {
 
 
@@ -12,9 +17,12 @@ async function signup(req, res) {
         lastName: req.body.lastName,
         email: req.body.email,
         contactNumber: req.body.contactNumber,
-        role:req.body.role
+        role: req.body.role
     }
 
+    /**
+     * To check if user exists or not 
+     */
     const existingUser = await User.findOne({ email: userObj.email });
     if (existingUser) {
         return res.status(400).json({
@@ -23,6 +31,9 @@ async function signup(req, res) {
     }
 
 
+    /**
+     * check if email is valid or not 
+     */
     const emailValidation = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailValidation.test(userObj.email)) {
         return res.status(400).json({
@@ -31,7 +42,10 @@ async function signup(req, res) {
     }
 
 
-    const contactValidation = /^[0-9]{10}$/;
+    /**
+     * check if contact number is valid or not
+     */
+    const contactValidation = /^\d{10}$/;
     if (!contactValidation.test(userObj.contactNumber)) {
         return res.status(400).json({
             message: 'Invalid contact number!'
@@ -58,6 +72,10 @@ async function signup(req, res) {
 }
 
 
+
+/**
+ * Login API endpoint 
+ */
 async function login(req, res) {
     const user = await User.findOne({ email: req.body.email })
 
@@ -73,6 +91,9 @@ async function login(req, res) {
         })
     }
 
+    /**
+     * generating jwt token to send it back to client
+     */
     const token = jwt.sign({ email: user.email }, secretConfig.secretKey)
 
     return res.set('x-access-token', token).status(200).send({
@@ -82,7 +103,7 @@ async function login(req, res) {
     })
 
 
-} 
+}
 
 module.exports = {
     signup: signup,

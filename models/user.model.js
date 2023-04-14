@@ -43,7 +43,9 @@ const userSchema = mongoose.Schema({
 )
 
 
-
+/**
+ * if the username is not given by user then generate a name for that user
+ */
 userSchema.pre('save', async function (next) {
     // Generate a unique username based on the user's first name
     if (!this.userName) {

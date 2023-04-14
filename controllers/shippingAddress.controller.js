@@ -2,6 +2,11 @@ const Address = require('../models/address.model');
 const User = require('../models/user.model');
 
 
+
+/**
+ * 
+ * API endpoints for getting shipping address 
+ */
 async function shippingAddress(req, res) {
 
 
@@ -26,7 +31,10 @@ async function shippingAddress(req, res) {
 
     try {
 
-        const contactValidation = /^[0-9]{10}$/;
+        /**
+         * to check if contact number has 10 digits or not 
+         */
+        const contactValidation = /^\d{10}$/;
         if (!contactValidation.test(req.body.contactNumber)) {
             return res.status(400).json({
                 message: 'Invalid contact number!'
@@ -35,7 +43,7 @@ async function shippingAddress(req, res) {
 
 
         // Validate the zip code format
-        const regex = /^[0-9]{6}$/;
+        const regex = /^\d{6}$/;
         if (!regex.test(req.body.zipcode)) {
             res.status(400).json({ message: 'Invalid zip code!' });
             return;

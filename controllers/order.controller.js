@@ -5,6 +5,11 @@ const constants = require('../utils/constants')
 const User = require('../models/user.model');
 
 
+
+/**
+ * 
+ * API to place an Order 
+ */
 async function placeOrder(req, res) {
 
     try {
@@ -21,7 +26,7 @@ async function placeOrder(req, res) {
             });
         }
 
-
+        //check for which user is logged in
         const loggedUser = await User.findOne({
             email: req.email
         })
@@ -73,6 +78,7 @@ async function placeOrder(req, res) {
 
         await product.save();
 
+        //populate the required fields with the given values 
         const responseObj = await Order.findById({
             _id: newOrder.id,
         })
@@ -85,9 +91,9 @@ async function placeOrder(req, res) {
 
     } catch (err) {
 
-        console.log("Some error while placing the order", err.message);
+        console.log(err.message);
         res.status(500).send({
-            message: "Some internal error while placing the order",
+            message: " Internal server error ",
         });
 
     }

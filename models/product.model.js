@@ -42,6 +42,10 @@ const productSchema = new mongoose.Schema({
     }
 )
 
+
+/**
+ * Generate random product id if the id is not given
+ */
 productSchema.pre('save', async function (next) {
     try {
         // const count = await this.constructor.countDocuments();
