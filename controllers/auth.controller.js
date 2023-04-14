@@ -11,7 +11,8 @@ async function signup(req, res) {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
-        contactNumber: req.body.contactNumber
+        contactNumber: req.body.contactNumber,
+        role:req.body.role
     }
 
     const existingUser = await User.findOne({ email: userObj.email });

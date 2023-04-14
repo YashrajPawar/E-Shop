@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
+const constants = require('../utils/constants')
 
 const userSchema = mongoose.Schema({
 
     firstName: {
         type: String,
-        required: true, 
+        required: true,
     },
     lastName: {
         type: String,
@@ -22,7 +23,8 @@ const userSchema = mongoose.Schema({
     },
     role: {
         type: String,
-        default: 'user'
+        enum: [constants.userType.admin, constants.userType.user],
+        default: constants.userType.user
     },
     contactNumber: {
         type: Number,

@@ -42,10 +42,14 @@ const productSchema = new mongoose.Schema({
     }
 )
 
-productSchema.pre('save', async function(next) {
+productSchema.pre('save', async function (next) {
     try {
-        const count = await this.constructor.countDocuments();
-        this.productId = count + 1;
+        // const count = await this.constructor.countDocuments();
+        // this.productId = count + 1;
+
+        if (!this.productId) {
+            this.productId = Date.now();
+        }
         next();
     } catch (err) {
         console.error('Error generating product ID:', err);

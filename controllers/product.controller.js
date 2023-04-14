@@ -4,6 +4,16 @@ const User = require('../models/user.model');
 
 async function createProduct(req, res) {
 
+
+    const accessToken = req.headers['x-access-token'];
+
+    // Check if the access token is provided
+    if (!accessToken) {
+        return res.status(401).send({
+            message: 'Please Login first to access this endpoint!'
+        });
+    }
+
     const productObj = {
         name: req.body.name,
         category: req.body.category,
@@ -94,10 +104,124 @@ async function getProductById(req, res) {
     }
 }
 
+async function updateProductDetails(req, res) {
 
+    const accessToken = req.headers['x-access-token'];
+
+    // Check if the access token is provided
+    if (!accessToken) {
+        return res.status(401).send({
+            message: 'Please Login first to access this endpoint!'
+        });
+    }
+
+    try {
+
+        const loggedUser = await User.findOne({
+            email: req.email
+        })
+
+        if (loggedUser.role != constants.userType.admin) {
+
+            return res.status(401).send({
+                message: 'You are not authorised to access this endpoint!'
+            })
+
+        }
+
+        const product = await Product.findOne({
+            productId: req.params.id
+        })
+
+
+        if (!product) {
+            return res.status(200).send({
+                message: `No product found for ID ${req.params.id}`
+            })
+        }
+
+        product.name = req.body.name != undefined ? req.body.name : product.name;
+        product.availableItems = req.body.availableItems != undefined ? req.body.availableItems : product.availableItems;
+        product.price = req.body.price != undefined ? req.body.price : product.price;
+        product.category = req.body.category != undefined ? req.body.category : product.category;
+        product.description = req.body.description != undefined ? req.body.description : product.description;
+        product.imageURL = req.body.imageURL != undefined ? req.body.imageURL : product.imageURL;
+        product.manufacturer = req.body.manufacturer != undefined ? req.body.manufacturer : product.manufacturer;
+
+        const updatedProduct = await product.save();
+        return res.status(200).send(updatedProduct);
+
+
+    } catch (err) {
+
+        console.log(err.message)
+        return res.status(500).send({
+            message: 'Internal server error'
+        })
+
+    }
+}
+
+async function deleteProduct(req, res) {
+
+    const accessToken = req.headers['x-access-token'];
+
+    // Check if the access token is provided
+    if (!accessToken) {
+        return res.status(401).send({
+            message: 'Please Login first to access this endpoint!'
+        });
+    }
+
+
+    try {
+
+        const loggedUser = await User.findOne({
+            email: req.email
+        })
+
+        if (loggedUser.role != constants.userType.admin) {
+
+            return res.status(401).send({
+                message: 'You are not authorised to access this endpoint!'
+            })
+
+        }
+
+        const product = await Product.findOne({
+            productId: req.params.id
+        })
+
+
+        if (!product) {
+            return res.status(200).send({
+                message: `No product found for ID ${req.params.id}`
+            })
+        }
+
+        console.log('comming home');
+        const deleteProduct = await Product.findOneAndRemove({
+            productId: req.params.id 
+        });
+        return res.status(200).send(deleteProduct);
+
+
+
+    } catch (err) {
+
+        console.log(err.message)
+        return res.status(500).send({
+            message: 'Internal server error'
+        })
+
+    }
+
+}
 
 module.exports = {
     createProduct: createProduct,
     getProduct: getProduct,
-    getProductById: getProductById
+    getProductById: getProductById,
+    updateProductDetails: updateProductDetails,
+    deleteProduct: deleteProduct,
 }
