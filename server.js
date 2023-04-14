@@ -14,6 +14,7 @@ mongoose.connect(dbConfig.url).then(function () {
 require('./routes/auth.route')(app);
 require('./routes/address.route')(app);
 require('./routes/product.route')(app);
+require('./routes/order.route')(app);
 
 
 app.listen(8080, () => {
