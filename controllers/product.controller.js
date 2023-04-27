@@ -237,7 +237,9 @@ async function deleteProduct(req, res) {
         const deleteProduct = await Product.findOneAndRemove({
             productId: req.params.id
         });
-        return res.status(200).send(deleteProduct);
+        return res.status(200).send({
+            message: `Product with ${req.params.id} deleted successfully`
+        });
 
 
 
